@@ -83,33 +83,11 @@ print(failed_df.groupby("payment_type")["payment_id"].count())
 print("\nAverage amount by country:")
 print(df.groupby("country")["amount"].mean())
 
-print("\n Payment count by API channel:")
-api_df = df[df["channel"] == "API"]
-print(api_df.payment_id.count())
+print("\n Payment count by channel:")
+print(df.groupby("channel")["payment_id"].count())
 
-print("\n Payment count by FILE channel:")
-file_df = df[df["channel"] == "FILE"]
-print(file_df.payment_id.count())
-
-print("\n Payment count by BATCH channel:")
-batch_df = df[df["channel"] == "BATCH"]
-print(batch_df.payment_id.count())
-
-print("\n Payment count by ONLINE channel:")
-online_df = df[df["channel"] == "ONLINE"]
-print(online_df.payment_id.count())
-
-print("\n ACH Total amount:")
-ach_df = df[df["payment_type"] == "ACH"]
-print(ach_df.amount.sum())
-
-print("\n WIRE Total amount:")
-wire_df = df[df["payment_type"] == "WIRE"]
-print(wire_df.amount.sum())
-
-print("\n SWIFT Total amount:")
-swift_df = df[df["payment_type"] == "SWIFT"]
-print(swift_df.amount.sum())
+print("\n Total amount by payment type:")
+print(df.groupby("payment_type")["amount"].sum())
 
 print("\n Failed high-value payments:")
 failed_high_value_df = df[(df["status"] == "FAILED") & (df["amount"] > 500000)]
