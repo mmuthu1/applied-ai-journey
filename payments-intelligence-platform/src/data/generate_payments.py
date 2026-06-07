@@ -50,7 +50,7 @@ def calculate_failure_probability(
     counterparty_risk_score,
     historical_failure_count,
 ):
-    probability = 0.03
+    probability = 0.04
 
     if amount > 500000:
         probability += 0.03
