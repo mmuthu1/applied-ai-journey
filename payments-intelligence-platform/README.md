@@ -214,41 +214,169 @@ Key observed patterns:
 
 ## Week 2 Roadmap
 
-The Week 2 payment failure classifier evaluation is documented here:
+## Week 2: Payment Failure Classifier
+
+Week 2 focused on building the first machine learning model for the Payments Intelligence Platform.
+
+The goal was to predict whether a payment is likely to fail using pre-outcome payment attributes and engineered features.
+
+### Week 2 Deliverables
+
+Week 2 added the following model development components:
+
+| Component                      | File                                          |
+| ------------------------------ | --------------------------------------------- |
+| Baseline classifier            | `src/models/train_failure_classifier.py`      |
+| Model comparison               | `src/models/compare_failure_classifiers.py`   |
+| Threshold tuning               | `src/models/tune_failure_threshold.py`        |
+| Model signal analysis          | `src/models/analyze_model_signals.py`         |
+| Model evaluation report        | `reports/payment_failure_model_evaluation.md` |
+| Saved model artifact           | `models/payment_failure_classifier.pkl`       |
+| Model artifact creation script | `src/models/save_failure_model.py`            |
+| Inference script               | `src/models/predict_failure.py`               |
+
+### Modeling Approach
+
+The classifier uses the engineered feature dataset:
 
 ```text
-reports/payment_failure_model_evaluation.md
-Planned work:
+data/processed/payments_features.csv
+```
 
-1. Load `payments_features.csv`
-2. Define features and target
-3. Encode categorical variables
-4. Split data into train/test sets
-5. Train baseline classification model
-6. Evaluate using precision, recall, F1, and confusion matrix
-7. Compare Logistic Regression and Random Forest
-8. Save the trained model
-9. Write a model evaluation report
+Target column:
 
-## Long-Term Roadmap
+```text
+is_failed
+```
 
-Future phases of this project will add:
+The model excludes leakage columns such as:
 
-* Cash forecasting
-* Payment anomaly detection
-* FastAPI model serving
-* Model monitoring
-* RAG assistant for payment operations runbooks
-* GenAI-based operational support
-* MLOps-style packaging and deployment
+```text
+status
+failure_reason
+```
 
-## Positioning
+because those columns reveal the final payment outcome.
 
-This project demonstrates applied AI engineering in a financial technology context. It combines payment-domain understanding, data engineering, ML readiness, validation, testing, and portfolio-quality documentation.
+### Models Evaluated
 
-## Model Artifact
+The following models were evaluated:
 
-The trained payment failure classifier can be saved using:
+1. No-skill baseline
+2. Logistic Regression
+3. Logistic Regression with balanced class weights
+4. Random Forest with balanced class weights
+
+The best current experimental model is:
+
+```text
+Logistic Regression with class_weight='balanced'
+```
+
+This model is useful as an experimental baseline because it catches more failed payments than the no-skill baseline, but it is not production-ready because precision is still low and false positives remain high.
+
+### Key Model Findings
+
+The dataset is imbalanced, with a payment failure rate of approximately 5.62%.
+
+A no-skill model can achieve high accuracy by predicting every payment as not failed, but it catches zero failed payments. Therefore, accuracy alone is not a useful metric for this use case.
+
+More relevant metrics include:
+
+* Precision
+* Recall
+* F1 score
+* False positives
+* False negatives
+* Alert volume
+* Operational cost
+
+### Threshold Tuning
+
+Threshold tuning showed that different probability cutoffs create different operational tradeoffs.
+
+A threshold of `0.60` produced the best F1 score among tested thresholds and reduced alert volume compared with the default `0.50` threshold.
+
+However, no threshold met the practical triage rule:
+
+```text
+Recall >= 40%
+Alert rate <= 30%
+```
+
+This means the current model is not yet strong enough for a practical production triage queue.
+
+### Model Signal Analysis
+
+Model signal analysis showed that several features align with business intuition:
+
+* `payment_type_SWIFT`
+* `channel_FILE`
+* `counterparty_risk_score`
+* `risk_adjusted_amount`
+* `amount`
+* `amount_log`
+* `historical_failure_count`
+
+Some Logistic Regression coefficients were counterintuitive because several engineered features overlap, such as amount, amount bucket, high-value flag, and risk-adjusted amount. This is a useful reminder that model interpretability requires care when features are correlated.
+
+### Inference
+
+The saved model can score new payment records using:
 
 ```bash
+python -m src.models.predict_failure
+```
+
+The inference script outputs:
+
+* Predicted failure class
+* Predicted failure probability
+* Risk band
+* Recommended action
+
+Example recommended actions include:
+
+* `Allow normal processing`
+* `Monitor or queue for secondary review`
+* `Review before release`
+
+### How to Run Week 2 Model Scripts
+
+From the `payments-intelligence-platform` folder:
+
+```bash
+python -m src.models.train_failure_classifier
+python -m src.models.compare_failure_classifiers
+python -m src.models.tune_failure_threshold
+python -m src.models.analyze_model_signals
 python -m src.models.save_failure_model
+python -m src.models.predict_failure
+```
+
+### Current Model Status
+
+Current status:
+
+```text
+Experimental baseline model
+```
+
+Not yet:
+
+```text
+Production-ready payment failure prediction system
+```
+
+### Recommended Next Improvements
+
+Future improvements should include:
+
+1. Stronger counterparty-level history features
+2. Rolling failure-rate features
+3. Probability bands for operational triage
+4. Class-weight and threshold tuning together
+5. Additional models such as Gradient Boosting
+6. Model calibration
+7. API serving with FastAPI
+8. Monitoring and drift detection

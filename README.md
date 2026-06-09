@@ -22,7 +22,9 @@ The Payments Intelligence Platform is an applied AI/ML project focused on:
 
 ## Current Status
 
-Week 1 completed the data foundation:
+### Week 1: Data Foundation — Completed
+
+Week 1 completed the data foundation for the Payments Intelligence Platform:
 
 * Synthetic payment data generation
 * Raw data validation
@@ -32,10 +34,24 @@ Week 1 completed the data foundation:
 * End-to-end pipeline orchestration
 * Data quality tests with pytest
 
+### Week 2: Payment Failure Classifier — Completed
+
+Week 2 completed the first applied ML model lifecycle:
+
+* Baseline payment failure classifier
+* Model comparison across Logistic Regression and Random Forest
+* Threshold tuning for operational triage
+* Model signal and feature importance analysis
+* Model evaluation report
+* Saved model artifact
+* Inference script for scoring new payment records
+
+The current model is an experimental baseline. It is useful for learning and portfolio demonstration, but it is not yet production-ready.
+
 ## Next Step
 
-Week 2 will focus on building the first ML model:
+The next project phase will focus on one of the following:
 
-```text
-Payment Failure Classifier
-```
+1. Improving the payment failure model with stronger features
+2. Starting cash forecasting
+3. Building an API layer for model serving
