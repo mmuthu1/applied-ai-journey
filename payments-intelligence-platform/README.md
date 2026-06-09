@@ -214,12 +214,10 @@ Key observed patterns:
 
 ## Week 2 Roadmap
 
-Week 2 will focus on building the first machine learning model:
+The Week 2 payment failure classifier evaluation is documented here:
 
 ```text
-Payment Failure Classifier
-```
-
+reports/payment_failure_model_evaluation.md
 Planned work:
 
 1. Load `payments_features.csv`
@@ -247,3 +245,10 @@ Future phases of this project will add:
 ## Positioning
 
 This project demonstrates applied AI engineering in a financial technology context. It combines payment-domain understanding, data engineering, ML readiness, validation, testing, and portfolio-quality documentation.
+
+## Model Artifact
+
+The trained payment failure classifier can be saved using:
+
+```bash
+python -m src.models.save_failure_model

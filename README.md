@@ -32,11 +32,10 @@ Week 1 completed the data foundation:
 * End-to-end pipeline orchestration
 * Data quality tests with pytest
 
+## Next Step
+
 Week 2 will focus on building the first ML model:
 
-## Model Evaluation Report
-
-The Week 2 payment failure classifier evaluation is documented here:
-
 ```text
-reports/payment_failure_model_evaluation.md
+Payment Failure Classifier
+```
