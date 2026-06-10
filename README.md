@@ -55,3 +55,14 @@ The next project phase will focus on one of the following:
 1. Improving the payment failure model with stronger features
 2. Starting cash forecasting
 3. Building an API layer for model serving
+
+### Week 3: Cash Forecasting — In Progress
+
+Week 3 adds a second applied AI use case:
+
+- Daily cash forecasting dataset
+- Baseline forecasts using previous day, 3-day average, and 7-day average
+- Time-based train/test split
+- Linear Regression and Random Forest regression models
+- Forecast evaluation using MAE, RMSE, and MAPE
+- Cash forecasting model evaluation report

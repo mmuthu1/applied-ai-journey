@@ -380,3 +380,10 @@ Future improvements should include:
 6. Model calibration
 7. API serving with FastAPI
 8. Monitoring and drift detection
+
+## Cash Forecasting Report
+
+The Week 3 cash forecasting model evaluation is documented here:
+
+```text
+reports/cash_forecasting_model_evaluation.md
