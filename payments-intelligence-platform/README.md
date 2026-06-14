@@ -381,17 +381,212 @@ Future improvements should include:
 7. API serving with FastAPI
 8. Monitoring and drift detection
 
-## Cash Forecasting Report
+## Week 3: Cash Forecasting
 
-The Week 3 cash forecasting model evaluation is documented here:
+Week 3 added the second applied AI/ML use case to the Payments Intelligence Platform: next-day cash forecasting.
+
+The goal was to forecast the next day’s total payment amount using daily payment activity, rolling averages, payment counts, failed payment rates, high-value payment rates, and calendar features.
+
+### Week 3 Deliverables
+
+| Component                                  | File                                            |
+| ------------------------------------------ | ----------------------------------------------- |
+| Daily cash forecasting dataset preparation | `src/forecasting/prepare_cash_forecast_data.py` |
+| Baseline cash forecasts                    | `src/forecasting/baseline_cash_forecast.py`     |
+| ML cash forecasting models                 | `src/forecasting/train_cash_forecast_model.py`  |
+| Cash forecasting evaluation report         | `reports/cash_forecasting_model_evaluation.md`  |
+| Saved cash forecast model artifact         | `models/cash_forecast_model.pkl`                |
+| Model artifact creation script             | `src/forecasting/save_cash_forecast_model.py`   |
+| Cash forecast inference script             | `src/forecasting/predict_cash_forecast.py`      |
+
+### Forecasting Dataset
+
+The forecasting dataset is created from cleaned payment transactions:
 
 ```text
-reports/cash_forecasting_model_evaluation.md
+data/processed/payments_clean.csv
 ```
 
-## Cash Forecast Model Artifact
+and saved as:
+
+```text
+data/processed/cash_forecast_daily.csv
+```
+
+The dataset converts transaction-level payments into daily aggregates.
+
+Target column:
+
+```text
+next_day_total_amount
+```
+
+This represents the next day’s total payment amount.
+
+### Forecasting Features
+
+The forecasting dataset includes features such as:
+
+* `daily_payment_count`
+* `daily_total_amount`
+* `daily_average_amount`
+* `daily_median_amount`
+* `failed_payment_count`
+* `high_value_payment_count`
+* `failed_payment_rate`
+* `high_value_payment_rate`
+* `previous_day_total_amount`
+* `rolling_3_day_avg_amount`
+* `rolling_7_day_avg_amount`
+* `rolling_3_day_payment_count`
+* `rolling_7_day_payment_count`
+* `day_of_week`
+* `month`
+* `day_of_month`
+* `is_weekend`
+
+### Baseline Forecasts
+
+Before training ML models, simple baseline forecasts were evaluated:
+
+1. Previous day amount
+2. 3-day moving average
+3. 7-day moving average
+
+The best baseline was:
+
+```text
+7-day moving average forecast
+```
+
+Baseline performance:
+
+```text
+MAE:  $923,898.74
+RMSE: $1,204,937.67
+MAPE: 32.27%
+```
+
+This baseline became the benchmark that ML models needed to beat.
+
+### ML Forecasting Models
+
+The following models were evaluated using a time-based train/test split:
+
+1. 7-day moving average baseline
+2. Linear Regression
+3. Random Forest Regressor
+
+A time-based split was used because forecasting should train on earlier dates and test on later dates.
+
+Training period:
+
+```text
+2024-01-07 to 2024-05-23
+```
+
+Test period:
+
+```text
+2024-05-24 to 2024-06-27
+```
+
+### Model Results
+
+| Model                         |         MAE |          RMSE |   MAPE | Improvement vs Baseline |
+| ----------------------------- | ----------: | ------------: | -----: | ----------------------: |
+| Random Forest Regressor       | $894,179.20 | $1,163,787.60 | 30.00% |                  +3.22% |
+| 7-day moving average baseline | $923,898.74 | $1,204,937.67 | 32.27% |                Baseline |
+| Linear Regression             | $926,054.91 | $1,134,513.00 | 31.59% |                  -0.23% |
+
+The current best experimental forecasting model is:
+
+```text
+Random Forest Regressor
+```
+
+It improved MAE by:
+
+```text
+$29,719.55
+```
+
+or:
+
+```text
+3.22%
+```
+
+compared with the 7-day moving average baseline.
+
+### Cash Forecast Model Artifact
 
 The trained cash forecasting model can be saved using:
 
 ```bash
 python -m src.forecasting.save_cash_forecast_model
+```
+
+This creates:
+
+```text
+models/cash_forecast_model.pkl
+```
+
+The saved artifact includes:
+
+* Trained Random Forest Regressor
+* Feature column list
+* Target column name
+
+### Cash Forecast Inference
+
+The saved model can score new daily cash activity records using:
+
+```bash
+python -m src.forecasting.predict_cash_forecast
+```
+
+The inference script outputs:
+
+* Predicted next-day total amount
+* Forecast band: LOW, MEDIUM, or HIGH
+* Forecast vs 7-day average
+* Forecast variance percentage
+* Recommended action
+
+Example recommendation categories:
+
+* `Normal cash operations planning`
+* `Monitor expected payment activity and exception volume`
+* `Review liquidity, staffing, and high-value payment queue`
+
+### Current Forecasting Model Status
+
+Current status:
+
+```text
+Experimental cash forecasting model
+```
+
+Not yet:
+
+```text
+Production-ready liquidity forecasting system
+```
+
+The workflow is correct, but the model was trained on synthetic data and only 173 daily records. More historical data and richer calendar/business features are needed before production use.
+
+### Recommended Next Improvements
+
+Future improvements should include:
+
+1. More historical daily records
+2. Holiday and banking calendar features
+3. Month-end and quarter-end indicators
+4. Currency-specific cash forecasts
+5. Inflow and outflow separation
+6. Payment-type-specific aggregates
+7. Prediction intervals or confidence bands
+8. Hyperparameter tuning
+9. Model monitoring and drift detection

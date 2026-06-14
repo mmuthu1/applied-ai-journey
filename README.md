@@ -56,13 +56,30 @@ The next project phase will focus on one of the following:
 2. Starting cash forecasting
 3. Building an API layer for model serving
 
-### Week 3: Cash Forecasting — In Progress
+### Week 3: Cash Forecasting — Completed
 
-Week 3 adds a second applied AI use case:
+Week 3 added a second applied AI use case to the Payments Intelligence Platform.
 
-- Daily cash forecasting dataset
-- Baseline forecasts using previous day, 3-day average, and 7-day average
-- Time-based train/test split
-- Linear Regression and Random Forest regression models
-- Forecast evaluation using MAE, RMSE, and MAPE
-- Cash forecasting model evaluation report
+Completed work:
+
+* Daily cash forecasting dataset
+* Baseline forecasts using previous day, 3-day average, and 7-day average
+* Time-based train/test split
+* Linear Regression and Random Forest regression models
+* Forecast evaluation using MAE, RMSE, and MAPE
+* Cash forecasting model evaluation report
+* Saved cash forecasting model artifact
+* Inference script for scoring new daily cash activity records
+
+The current best experimental forecasting model is a Random Forest Regressor. It improved MAE by 3.22% compared with the 7-day moving average baseline.
+
+The model is useful for learning and portfolio demonstration, but it is not yet production-ready.
+
+## Next Step
+
+The next project phase will focus on one of the following:
+
+1. Payment anomaly detection
+2. Improving the payment failure model with stronger historical features
+3. Building an API layer for model serving
+
