@@ -387,3 +387,11 @@ The Week 3 cash forecasting model evaluation is documented here:
 
 ```text
 reports/cash_forecasting_model_evaluation.md
+```
+
+## Cash Forecast Model Artifact
+
+The trained cash forecasting model can be saved using:
+
+```bash
+python -m src.forecasting.save_cash_forecast_model
