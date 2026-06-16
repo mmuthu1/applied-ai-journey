@@ -591,17 +591,200 @@ Future improvements should include:
 8. Hyperparameter tuning
 9. Model monitoring and drift detection
 
-## Payment Anomaly Detection Report
+## Week 4: Payment Anomaly Detection
 
-The Week 4 payment anomaly detection evaluation is documented here:
+Week 4 added the third applied AI/ML use case to the Payments Intelligence Platform: payment anomaly detection.
+
+The goal was to identify unusual payment transactions using a combination of business-rule anomaly logic and unsupervised machine learning.
+
+### Week 4 Deliverables
+
+| Component                        | File                                          |
+| -------------------------------- | --------------------------------------------- |
+| Payment anomaly feature dataset  | `src/anomaly/prepare_anomaly_dataset.py`      |
+| Isolation Forest anomaly model   | `src/anomaly/train_isolation_forest.py`       |
+| Anomaly results analysis         | `src/anomaly/analyze_anomaly_results.py`      |
+| Payment anomaly detection report | `reports/payment_anomaly_detection_report.md` |
+| Saved anomaly model artifact     | `models/payment_anomaly_detector.pkl`         |
+| Model artifact creation script   | `src/anomaly/save_anomaly_model.py`           |
+| Anomaly inference script         | `src/anomaly/predict_anomaly.py`              |
+
+### Anomaly Dataset
+
+The anomaly dataset is created from:
 
 ```text
-reports/payment_anomaly_detection_report.md
+data/processed/payments_features.csv
 ```
 
-## Payment Anomaly Model Artifact
+and saved as:
 
-The trained payment anomaly detector can be saved using:
+```text
+data/processed/payment_anomaly_features.csv
+```
+
+The scored anomaly dataset is saved as:
+
+```text
+data/processed/payment_anomaly_scored.csv
+```
+
+### Rule-Based Anomaly Features
+
+The rule-based layer flags known business-risk patterns, including:
+
+* Extreme payment amount
+* Top 1% payment amount
+* Extreme risk-adjusted amount
+* Top 1% counterparty risk score
+* High-risk large payment
+* Large FILE-channel payment
+* High-risk SWIFT payment
+* High-value payment with prior failures
+
+Each payment receives:
+
+```text
+rule_anomaly_score
+is_rule_based_anomaly
+anomaly_reasons
+```
+
+### Isolation Forest Model
+
+The unsupervised anomaly model uses:
+
+```text
+Isolation Forest
+```
+
+The model was configured with:
+
+```text
+contamination = 0.04
+```
+
+This asks the model to flag roughly 4% of records as anomalies, which is close to the rule-based anomaly rate.
+
+### Rule vs Model Comparison
+
+The anomaly workflow compares:
+
+```text
+business-rule anomalies
+vs
+Isolation Forest anomalies
+```
+
+Results:
+
+| Category         | Count | Meaning                         |
+| ---------------- | ----: | ------------------------------- |
+| `NORMAL`         | 4,758 | No anomaly review needed        |
+| `RULE_AND_MODEL` |   141 | Flagged by both rules and model |
+| `MODEL_ONLY`     |    59 | Flagged only by model           |
+| `RULE_ONLY`      |    42 | Flagged only by rules           |
+
+Combined anomaly review workload:
+
+```text
+242 payments
+4.84% of total payments
+```
+
+### Review Priority Queues
+
+The anomaly workflow assigns review priorities:
+
+| Priority         | Source           | Recommended Action                 |
+| ---------------- | ---------------- | ---------------------------------- |
+| `P1_HIGH`        | `RULE_AND_MODEL` | High-priority anomaly review       |
+| `P2_INVESTIGATE` | `MODEL_ONLY`     | Investigate unusual pattern        |
+| `P3_KNOWN_RISK`  | `RULE_ONLY`      | Review known business-risk pattern |
+| `P4_NORMAL`      | `NORMAL`         | No anomaly review needed           |
+
+### Failure Rate by Anomaly Source
+
+Anomaly groups showed higher failure rates than normal payments:
+
+| Source           | Failure Rate |
+| ---------------- | -----------: |
+| `RULE_ONLY`      |       11.90% |
+| `MODEL_ONLY`     |       11.86% |
+| `RULE_AND_MODEL` |        8.51% |
+| `NORMAL`         |        5.40% |
+
+This suggests the anomaly workflow is identifying groups with elevated payment failure risk.
+
+### Anomaly Model Artifact
+
+The trained anomaly detector can be saved using:
 
 ```bash
 python -m src.anomaly.save_anomaly_model
+```
+
+This creates:
+
+```text
+models/payment_anomaly_detector.pkl
+```
+
+The saved artifact includes:
+
+* Full sklearn Pipeline
+* StandardScaler for numeric features
+* OneHotEncoder for categorical features
+* Boolean passthrough features
+* Isolation Forest model
+* Feature column list
+* Contamination setting
+
+### Anomaly Inference
+
+The saved anomaly detector can score new payment records using:
+
+```bash
+python -m src.anomaly.predict_anomaly
+```
+
+The inference script outputs:
+
+* Anomaly score
+* Anomaly band
+* Rule-based anomaly flag
+* Model anomaly flag
+* Anomaly source
+* Review priority
+* Recommended action
+* Anomaly reasons
+
+### Current Anomaly Model Status
+
+Current status:
+
+```text
+Experimental anomaly detection workflow
+```
+
+Not yet:
+
+```text
+Production-ready payment anomaly monitoring system
+```
+
+The workflow is useful for learning, portfolio demonstration, and early anomaly triage design. It combines business rules with unsupervised model-based pattern discovery.
+
+### Recommended Next Improvements
+
+Future improvements should include:
+
+1. Tune Isolation Forest contamination rate.
+2. Add counterparty-level historical behavior features.
+3. Add rolling amount and volume features by counterparty.
+4. Add currency-pair and country-pair anomaly features.
+5. Add alert suppression rules.
+6. Add analyst feedback labels.
+7. Track anomaly investigation outcomes.
+8. Add monitoring and drift detection.
+9. Serve anomaly scoring through an API.

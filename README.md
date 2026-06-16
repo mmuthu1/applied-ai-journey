@@ -75,21 +75,38 @@ The current best experimental forecasting model is a Random Forest Regressor. It
 
 The model is useful for learning and portfolio demonstration, but it is not yet production-ready.
 
+### Week 4: Payment Anomaly Detection — Completed
+
+Week 4 added a third applied AI use case to the Payments Intelligence Platform.
+
+Completed work:
+
+* Rule-based payment anomaly features
+* Amount and risk-adjusted anomaly scoring
+* Isolation Forest anomaly detection
+* Rule vs model anomaly comparison
+* Anomaly source classification:
+
+  * `RULE_AND_MODEL`
+  * `MODEL_ONLY`
+  * `RULE_ONLY`
+  * `NORMAL`
+* Review priority queues:
+
+  * `P1_HIGH`
+  * `P2_INVESTIGATE`
+  * `P3_KNOWN_RISK`
+  * `P4_NORMAL`
+* Payment anomaly detection report
+* Saved anomaly model artifact
+* Inference script for scoring new payment records
+
+The anomaly workflow combines business-rule detection with unsupervised machine learning. The current workflow is useful for learning and portfolio demonstration, but it is not yet production-ready.
+
 ## Next Step
 
 The next project phase will focus on one of the following:
 
-1. Payment anomaly detection
+1. Building an API layer for model serving
 2. Improving the payment failure model with stronger historical features
-3. Building an API layer for model serving
-
-### Week 4: Payment Anomaly Detection — In Progress
-
-Week 4 adds a third applied AI use case:
-
-- Rule-based payment anomaly features
-- Isolation Forest anomaly detection
-- Rule vs model anomaly comparison
-- Anomaly review priority queues
-- Payment anomaly detection report
-
+3. Adding richer MLOps-style monitoring and model evaluation
