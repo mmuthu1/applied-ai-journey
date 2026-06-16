@@ -597,3 +597,11 @@ The Week 4 payment anomaly detection evaluation is documented here:
 
 ```text
 reports/payment_anomaly_detection_report.md
+```
+
+## Payment Anomaly Model Artifact
+
+The trained payment anomaly detector can be saved using:
+
+```bash
+python -m src.anomaly.save_anomaly_model
