@@ -83,3 +83,13 @@ The next project phase will focus on one of the following:
 2. Improving the payment failure model with stronger historical features
 3. Building an API layer for model serving
 
+### Week 4: Payment Anomaly Detection — In Progress
+
+Week 4 adds a third applied AI use case:
+
+- Rule-based payment anomaly features
+- Isolation Forest anomaly detection
+- Rule vs model anomaly comparison
+- Anomaly review priority queues
+- Payment anomaly detection report
+

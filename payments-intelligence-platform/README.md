@@ -590,3 +590,10 @@ Future improvements should include:
 7. Prediction intervals or confidence bands
 8. Hyperparameter tuning
 9. Model monitoring and drift detection
+
+## Payment Anomaly Detection Report
+
+The Week 4 payment anomaly detection evaluation is documented here:
+
+```text
+reports/payment_anomaly_detection_report.md
