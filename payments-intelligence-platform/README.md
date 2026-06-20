@@ -788,3 +788,12 @@ Future improvements should include:
 7. Track anomaly investigation outcomes.
 8. Add monitoring and drift detection.
 9. Serve anomaly scoring through an API.
+
+## API Serving
+
+The project includes a FastAPI application for serving model predictions.
+
+Run locally:
+
+```bash
+uvicorn src.api.main:app --reload
