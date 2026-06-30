@@ -793,6 +793,18 @@ Future improvements should include:
 
 The project includes a FastAPI application for serving model predictions.
 
+```markdown id="qc75pd"
+Available endpoints:
+
+GET  /
+GET  /health
+GET  /models
+
+POST /predict/payment-failure
+POST /predict/cash-forecast
+POST /predict/payment-anomaly
+```
+
 ### Payment Failure Prediction Endpoint
 
 ```text
@@ -809,6 +821,12 @@ POST /predict/cash-forecast
 
 ```text
 POST /predict/payment-anomaly
+```
+
+### API Metadata Endpoint
+
+```text
+GET /models
 ```
 
 Run locally:

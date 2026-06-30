@@ -1,3 +1,4 @@
+from typing import List
 from pydantic import BaseModel, Field
 
 
@@ -83,3 +84,15 @@ class PaymentAnomalyResponse(BaseModel):
     review_priority: str
     anomaly_reasons: str
     recommended_action: str
+
+
+class ModelInfo(BaseModel):
+    name: str
+    endpoint: str
+    model_type: str
+    description: str
+    status: str
+
+
+class ModelsResponse(BaseModel):
+    available_models: List[ModelInfo]

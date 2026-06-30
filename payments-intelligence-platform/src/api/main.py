@@ -9,6 +9,8 @@ from src.api.model_loader import (
 from src.api.schemas import (
     CashForecastRequest,
     CashForecastResponse,
+    ModelInfo,
+    ModelsResponse,
     PaymentAnomalyRequest,
     PaymentAnomalyResponse,
     PaymentFailureRequest,
@@ -42,9 +44,14 @@ def root():
     return {
         "message": "Payments Intelligence Platform API",
         "status": "running",
-        "available_endpoints": [
-            "/health",
-            "/docs",
+        "version": "0.1.0",
+        "docs_url": "/docs",
+        "health_url": "/health",
+        "models_url": "/models",
+        "prediction_endpoints": [
+            "/predict/payment-failure",
+            "/predict/cash-forecast",
+            "/predict/payment-anomaly",
         ],
     }
 
@@ -56,6 +63,42 @@ def health_check():
         "service": "payments-intelligence-platform-api",
         "version": "0.1.0",
     }
+
+@app.get("/models", response_model=ModelsResponse)
+def list_models():
+    return ModelsResponse(
+        available_models=[
+            ModelInfo(
+                name="payment_failure_classifier",
+                endpoint="/predict/payment-failure",
+                model_type="classification",
+                description=(
+                    "Predicts payment failure risk and recommends operational action."
+                ),
+                status="available",
+            ),
+            ModelInfo(
+                name="cash_forecast_model",
+                endpoint="/predict/cash-forecast",
+                model_type="regression",
+                description=(
+                    "Forecasts next-day total payment amount from daily cash activity."
+                ),
+                status="available",
+            ),
+            ModelInfo(
+                name="payment_anomaly_detector",
+                endpoint="/predict/payment-anomaly",
+                model_type="anomaly_detection",
+                description=(
+                    "Detects unusual payment patterns using business rules "
+                    "and Isolation Forest."
+                ),
+                status="available",
+            ),
+        ]
+    )
+
 
 @app.post("/predict/payment-failure", response_model=PaymentFailureResponse)
 def predict_payment_failure(request: PaymentFailureRequest):
