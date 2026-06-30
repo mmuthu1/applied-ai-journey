@@ -6,7 +6,7 @@ The Payments Intelligence Platform is an applied AI/ML engineering project focus
 
 This project is designed as a hands-on portfolio project to demonstrate how AI and machine learning can be applied to enterprise payment workflows.
 
-The current version focuses on building a clean, validated, ML-ready payment transaction dataset.
+The current version includes data validation, feature engineering, machine learning models, saved model artifacts, FastAPI model-serving endpoints, and automated data quality/API tests.
 
 ## Business Problem
 
@@ -20,20 +20,21 @@ This project explores how AI/ML techniques can support payment operations by ena
 * Operational risk scoring
 * Future GenAI/RAG-based runbook assistance
 
-## Current Scope: Week 1 Data Foundation
+## Current Platform Capabilities
 
-Week 1 focuses on creating the foundation required for future machine learning work.
-
-The current pipeline performs:
+The current platform includes:
 
 1. Synthetic payment data generation
-2. Raw data validation
-3. Data cleaning
-4. Clean data validation
-5. Feature engineering
-6. Final feature dataset validation
-7. Data quality testing with pytest
-8. Exploratory failure-pattern analysis
+2. Raw and clean data validation
+3. Feature engineering
+4. Payment failure prediction
+5. Cash forecasting
+6. Payment anomaly detection
+7. Saved model artifacts
+8. FastAPI model-serving endpoints
+9. Data quality testing with pytest
+10. API endpoint testing with pytest
+11. Exploratory failure-pattern and anomaly analysis
 
 ## Project Structure
 
@@ -183,7 +184,7 @@ The current test suite validates:
 Current result:
 
 ```text
-17 passed
+22 passed
 ```
 
 ## Exploratory Data Analysis Findings
@@ -775,27 +776,13 @@ Production-ready payment anomaly monitoring system
 
 The workflow is useful for learning, portfolio demonstration, and early anomaly triage design. It combines business rules with unsupervised model-based pattern discovery.
 
-### Recommended Next Improvements
+## Week 5: FastAPI Model Serving
 
-Future improvements should include:
+The Week 5 milestone turns the Payments Intelligence Platform from standalone ML scripts into an API-backed application.
 
-1. Tune Isolation Forest contamination rate.
-2. Add counterparty-level historical behavior features.
-3. Add rolling amount and volume features by counterparty.
-4. Add currency-pair and country-pair anomaly features.
-5. Add alert suppression rules.
-6. Add analyst feedback labels.
-7. Track anomaly investigation outcomes.
-8. Add monitoring and drift detection.
-9. Serve anomaly scoring through an API.
+The FastAPI app serves three model workflows:
 
-## API Serving
-
-The project includes a FastAPI application for serving model predictions.
-
-```markdown id="qc75pd"
-Available endpoints:
-
+```text
 GET  /
 GET  /health
 GET  /models
@@ -809,30 +796,71 @@ POST /predict/payment-anomaly
 
 ```text
 POST /predict/payment-failure
+
+Accepts payment-level details and returns:
+
+predicted failure flag
+predicted failure probability
+risk band
+recommended operational action
+
 ```
 
 ### Cash Forecast Prediction Endpoint
 
 ```text
 POST /predict/cash-forecast
+
+Accepts daily payment activity and returns:
+
+predicted next-day total payment amount
+forecast band
+recommended action
+difference from 7-day rolling average
+percentage difference from 7-day rolling average
+
 ```
 
 ### Payment Anomaly Detection Endpoint
 
 ```text
 POST /predict/payment-anomaly
+
+Accepts payment-level details and returns:
+
+model anomaly flag
+rule-based anomaly flag
+anomaly score
+anomaly band
+anomaly source
+review priority
+anomaly reasons
+recommended action
+
 ```
 
 ### API Metadata Endpoint
 
 ```text
 GET /models
+
+Lists the available model-serving endpoints:
+
+payment failure classifier
+cash forecast model
+payment anomaly detector
+
 ```
 
-Run locally:
+Running the API Locally:
 
 ```bash
 uvicorn src.api.main:app --reload
+
+Then open:
+
+http://127.0.0.1:8000/docs
+
 ```
 
 ### API Tests
@@ -847,5 +875,37 @@ The API layer includes automated tests for:
 
 Run API tests:
 
+The API layer includes automated tests for:
+
+health check endpoint
+model metadata endpoint
+payment failure prediction endpoint
+cash forecast prediction endpoint
+payment anomaly detection endpoint
+
 ```bash
 pytest tests/test_api.py -v
+```
+
+Run all tests:
+
+```bash
+pytest -v
+
+Latest full test result:
+
+22 passed
+
+```
+
+### Recommended Next Improvements
+
+Future improvements should include:
+
+1. Add request/response examples to the README.
+2. Add stronger input validation for allowed categorical values.
+3. Add API error handling.
+4. Add prediction logging.
+5. Add model/version metadata.
+6. Add monitoring and drift checks.
+7. Containerize the API with Docker.
