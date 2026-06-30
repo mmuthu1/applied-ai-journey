@@ -58,3 +58,28 @@ class CashForecastResponse(BaseModel):
     recommended_action: str
     forecast_vs_7_day_avg: float
     forecast_vs_7_day_avg_pct: float
+
+
+class PaymentAnomalyRequest(BaseModel):
+    payment_id: str
+    amount: float = Field(gt=0)
+    currency: str
+    country: str
+    payment_type: str
+    channel: str
+    counterparty_risk_score: float = Field(ge=0, le=1)
+    historical_failure_count: int = Field(ge=0)
+    settlement_window: str
+    payment_date: str
+
+
+class PaymentAnomalyResponse(BaseModel):
+    payment_id: str
+    is_model_anomaly: bool
+    is_rule_based_anomaly: bool
+    anomaly_score: float
+    anomaly_band: str
+    anomaly_source: str
+    review_priority: str
+    anomaly_reasons: str
+    recommended_action: str

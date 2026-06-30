@@ -804,6 +804,13 @@ POST /predict/payment-failure
 ```text
 POST /predict/cash-forecast
 ```
+
+### Payment Anomaly Detection Endpoint
+
+```text
+POST /predict/payment-anomaly
+```
+
 Run locally:
 
 ```bash

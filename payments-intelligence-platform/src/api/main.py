@@ -3,15 +3,24 @@ import pandas as pd
 from fastapi import FastAPI
 from src.api.model_loader import (
     get_cash_forecast_artifact,
+    get_payment_anomaly_artifact,
     get_payment_failure_model,
 )
 from src.api.schemas import (
     CashForecastRequest,
     CashForecastResponse,
+    PaymentAnomalyRequest,
+    PaymentAnomalyResponse,
     PaymentFailureRequest,
     PaymentFailureResponse,
 )
 from src.forecasting.predict_cash_forecast import predict_next_day_cash_amounts
+from src.anomaly.predict_anomaly import (
+    add_anomaly_features,
+    add_base_features,
+    add_rule_based_anomaly_features,
+    predict_anomalies,
+)
 from src.models.predict_failure import (
     add_engineered_features,
     predict_payment_failures,
@@ -90,4 +99,33 @@ def predict_cash_forecast(request: CashForecastRequest):
         recommended_action=result["recommended_action"],
         forecast_vs_7_day_avg=float(result["forecast_vs_7_day_avg"]),
         forecast_vs_7_day_avg_pct=float(result["forecast_vs_7_day_avg_pct"]),
+    )
+
+@app.post("/predict/payment-anomaly", response_model=PaymentAnomalyResponse)
+def predict_payment_anomaly(request: PaymentAnomalyRequest):
+    artifact = get_payment_anomaly_artifact()
+
+    payment_df = pd.DataFrame([request.model_dump()])
+
+    payment_df = add_base_features(payment_df)
+    payment_df = add_anomaly_features(payment_df)
+    payment_df = add_rule_based_anomaly_features(payment_df)
+
+    results_df = predict_anomalies(
+        artifact=artifact,
+        payments_df=payment_df,
+    )
+
+    result = results_df.iloc[0]
+
+    return PaymentAnomalyResponse(
+        payment_id=result["payment_id"],
+        is_model_anomaly=bool(result["is_model_anomaly"]),
+        is_rule_based_anomaly=bool(result["is_rule_based_anomaly"]),
+        anomaly_score=float(result["anomaly_score"]),
+        anomaly_band=result["anomaly_band"],
+        anomaly_source=result["anomaly_source"],
+        review_priority=result["review_priority"],
+        anomaly_reasons=result["anomaly_reasons"],
+        recommended_action=result["recommended_action"],
     )
