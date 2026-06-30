@@ -833,3 +833,19 @@ Run locally:
 
 ```bash
 uvicorn src.api.main:app --reload
+```
+
+### API Tests
+
+The API layer includes automated tests for:
+
+- health check endpoint
+- model metadata endpoint
+- payment failure prediction endpoint
+- cash forecast prediction endpoint
+- payment anomaly detection endpoint
+
+Run API tests:
+
+```bash
+pytest tests/test_api.py -v
