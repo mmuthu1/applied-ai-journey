@@ -793,6 +793,11 @@ Future improvements should include:
 
 The project includes a FastAPI application for serving model predictions.
 
+### Payment Failure Prediction Endpoint
+
+```text
+POST /predict/payment-failure
+
 Run locally:
 
 ```bash
