@@ -25,3 +25,36 @@ class PaymentFailureResponse(BaseModel):
     predicted_failure_probability: float
     prediction_risk_band: str
     recommended_action: str
+
+
+class CashForecastRequest(BaseModel):
+    forecast_date: str
+    daily_payment_count: int = Field(ge=0)
+    daily_total_amount: float = Field(ge=0)
+    daily_average_amount: float = Field(ge=0)
+    daily_median_amount: float = Field(ge=0)
+    failed_payment_count: int = Field(ge=0)
+    high_value_payment_count: int = Field(ge=0)
+    unique_currency_count: int = Field(ge=0)
+    unique_country_count: int = Field(ge=0)
+    failed_payment_rate: float = Field(ge=0, le=1)
+    high_value_payment_rate: float = Field(ge=0, le=1)
+    day_of_week: int = Field(ge=0, le=6)
+    month: int = Field(ge=1, le=12)
+    day_of_month: int = Field(ge=1, le=31)
+    is_weekend: bool
+    previous_day_total_amount: float = Field(ge=0)
+    previous_day_payment_count: int = Field(ge=0)
+    rolling_3_day_avg_amount: float = Field(ge=0)
+    rolling_7_day_avg_amount: float = Field(ge=0)
+    rolling_3_day_payment_count: float = Field(ge=0)
+    rolling_7_day_payment_count: float = Field(ge=0)
+
+
+class CashForecastResponse(BaseModel):
+    forecast_date: str
+    predicted_next_day_total_amount: float
+    forecast_band: str
+    recommended_action: str
+    forecast_vs_7_day_avg: float
+    forecast_vs_7_day_avg_pct: float

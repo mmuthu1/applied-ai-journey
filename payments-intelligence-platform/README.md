@@ -797,7 +797,13 @@ The project includes a FastAPI application for serving model predictions.
 
 ```text
 POST /predict/payment-failure
+```
 
+### Cash Forecast Prediction Endpoint
+
+```text
+POST /predict/cash-forecast
+```
 Run locally:
 
 ```bash
