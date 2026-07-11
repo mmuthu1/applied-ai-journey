@@ -154,26 +154,45 @@ Key outcome:
 Turned standalone ML inference scripts into API-backed model-serving endpoints.
 ```
 
-## Current Status
+### Week 6: Payment Failure Classifier v2 — Completed
 
-The Payments Intelligence Platform currently demonstrates an end-to-end applied AI workflow:
+Week 6 improved the payment failure classifier by adding stronger failure-risk features and tuning the model threshold for a better operational tradeoff.
+
+Completed work:
+
+- diagnosed the Week 2 baseline model weakness
+- created v2 failure-risk features
+- trained v2 model candidates
+- tuned the v2 operating threshold
+- saved a v2 model artifact
+- created a v2 inference script
+- documented the v2 model evaluation
+
+Recommended v2 setup:
 
 ```text
-data generation → validation → feature engineering → model training → evaluation → saved artifacts → inference → FastAPI serving → automated tests
+Model: Logistic Regression Balanced v2
+Threshold: 0.55
+```
+Key improvement:
+
+```text
+Reduced false positives from 355 to 239 while keeping recall at 50%.
 ```
 
-The project is still experimental and uses synthetic payment operations data. It is designed for learning and portfolio demonstration, not production use.
+## Current Status
+
+Improved experimental payment failure classifier
 
 ## Next Step
 
-The next project phase will focus on improving the payment failure model.
+The next project phase will focus on monitoring, governance, and MLOps foundations.
 
-Planned Week 6 work:
+Planned Week 7 work:
 
-* add stronger counterparty-level historical features
-* add rolling failure-rate features
-* improve model signal quality
-* reduce false positives
-* compare improved model performance against the Week 2 baseline
-* update the model evaluation report
-* prepare a short LinkedIn progress update
+- prediction logging
+- model metadata tracking
+- data drift checks
+- model monitoring report
+- governance-aware model documentation
+- production-readiness notes

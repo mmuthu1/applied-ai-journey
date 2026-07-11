@@ -909,3 +909,59 @@ Future improvements should include:
 5. Add model/version metadata.
 6. Add monitoring and drift checks.
 7. Containerize the API with Docker.
+
+## Week 6: Payment Failure Classifier v2
+
+Week 6 improved the original payment failure classifier by adding stronger failure-risk features, comparing v2 model candidates, tuning the operating threshold, and saving an improved v2 model artifact.
+
+### Week 6 Deliverables
+
+| Component | File |
+|---|---|
+| Baseline diagnosis | `src/models/diagnose_failure_model.py` |
+| V2 feature engineering | `src/models/build_failure_features_v2.py` |
+| V2 model training | `src/models/train_failure_classifier_v2.py` |
+| V2 threshold tuning | `src/models/tune_failure_threshold_v2.py` |
+| V2 saved model artifact | `models/payment_failure_classifier_v2.pkl` |
+| V2 model save script | `src/models/save_failure_model_v2.py` |
+| V2 inference script | `src/models/predict_failure_v2.py` |
+| V2 evaluation report | `reports/payment_failure_model_v2_evaluation.md` |
+
+### V2 Improvement Summary
+
+The Week 2 baseline created too many false positives.
+
+The v2 model improved the operating tradeoff by using stronger feature engineering and a tuned threshold.
+
+Recommended v2 setup:
+
+```text
+Model: Logistic Regression Balanced v2
+Threshold: 0.55
+```
+
+Comparison against Week 2 baseline:
+
+| Metric          | Week 2 Baseline | V2 Threshold 0.55 |
+| --------------- | --------------: | ----------------: |
+| Precision       |          0.0779 |            0.1049 |
+| Recall          |          0.5357 |            0.5000 |
+| F1              |          0.1361 |            0.1734 |
+| False positives |             355 |               239 |
+| False negatives |              26 |                28 |
+| Alert rate      |           38.5% |             26.7% |
+
+Business interpretation:
+```text
+V2 reduced false positives by 116 while only increasing false negatives by 2.
+```
+
+Current status:
+```text
+Improved experimental payment failure classifier
+```
+
+Not yet:
+```text
+Production-ready payment failure triage system
+```
