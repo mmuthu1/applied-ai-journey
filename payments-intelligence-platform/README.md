@@ -35,6 +35,10 @@ The current platform includes:
 9. Data quality testing with pytest
 10. API endpoint testing with pytest
 11. Exploratory failure-pattern and anomaly analysis
+12. Model metadata registry
+13. Prediction audit logging
+14. Data drift monitoring
+15. Generated model monitoring report
 
 ## Project Structure
 
@@ -50,11 +54,30 @@ payments-intelligence-platform/
     processed/
       payments_clean.csv
       payments_features.csv
+      cash_forecast_daily.csv
+      payment_anomaly_features.csv
+      payment_anomaly_scored.csv
+      payments_failure_features_v2.csv
+    monitoring/
+      model_metadata.json
+      prediction_logs.csv
+      data_drift_summary.csv
+
+  models/
+    payment_failure_classifier.pkl
+    payment_failure_classifier_v2.pkl
+    cash_forecast_model.pkl
+    payment_anomaly_detector.pkl
+
+  reports/
+    payment_failure_model_evaluation.md
+    cash_forecasting_model_evaluation.md
+    payment_anomaly_detection_report.md
+    payment_failure_model_v2_evaluation.md
+    model_monitoring_report.md
 
   src/
-    __init__.py
     data/
-      __init__.py
       generate_payments.py
       validate_payments.py
       clean_payments.py
@@ -62,8 +85,48 @@ payments-intelligence-platform/
       payment_failure_eda.py
       run_pipeline.py
 
+    models/
+      train_failure_classifier.py
+      compare_failure_classifiers.py
+      tune_failure_threshold.py
+      analyze_model_signals.py
+      save_failure_model.py
+      predict_failure.py
+      diagnose_failure_model.py
+      build_failure_features_v2.py
+      train_failure_classifier_v2.py
+      tune_failure_threshold_v2.py
+      save_failure_model_v2.py
+      predict_failure_v2.py
+
+    forecasting/
+      prepare_cash_forecast_data.py
+      baseline_cash_forecast.py
+      train_cash_forecast_model.py
+      save_cash_forecast_model.py
+      predict_cash_forecast.py
+
+    anomaly/
+      prepare_anomaly_dataset.py
+      train_isolation_forest.py
+      analyze_anomaly_results.py
+      save_anomaly_model.py
+      predict_anomaly.py
+
+    api/
+      main.py
+      schemas.py
+      model_loader.py
+
+    monitoring/
+      model_metadata.py
+      prediction_logger.py
+      data_drift_check.py
+      generate_monitoring_report.py
+
   tests/
     test_data_quality.py
+    test_api.py
 ```
 
 ## Dataset Schema
@@ -965,3 +1028,158 @@ Not yet:
 ```text
 Production-ready payment failure triage system
 ```
+## Week 7: Monitoring, Governance, and MLOps Foundations
+
+Week 7 added a basic monitoring and governance layer to make the Payments Intelligence Platform more operationally realistic.
+
+The goal was to move beyond model training and API serving by adding visibility into model metadata, prediction activity, drift monitoring, and production-readiness gaps.
+
+### Week 7 Deliverables
+
+| Component | File |
+|---|---|
+| Model metadata registry | `src/monitoring/model_metadata.py` |
+| Prediction logging utility | `src/monitoring/prediction_logger.py` |
+| Data drift monitoring check | `src/monitoring/data_drift_check.py` |
+| Monitoring report generator | `src/monitoring/generate_monitoring_report.py` |
+| Model metadata output | `data/monitoring/model_metadata.json` |
+| Prediction audit log | `data/monitoring/prediction_logs.csv` |
+| Drift summary output | `data/monitoring/data_drift_summary.csv` |
+| Monitoring report | `reports/model_monitoring_report.md` |
+
+### Monitoring Capabilities Added
+
+The platform now includes:
+
+- model metadata tracking
+- model version tracking
+- model artifact tracking
+- prediction audit logging
+- data drift monitoring
+- generated monitoring report
+- documented governance limitations
+- documented production-readiness recommendations
+
+### Model Metadata Registry
+
+The model metadata registry is generated at:
+
+```text
+data/monitoring/model_metadata.json
+```
+It tracks:
+
+model name
+model version
+model type
+artifact path
+training dataset
+target column
+serving status
+API endpoint
+recommended threshold
+primary metrics
+known limitations
+
+This helps answer governance questions such as which model version is available, which artifact is used, and whether a model is currently connected to the API.
+
+Prediction Audit Logging
+
+Prediction events are logged to:
+
+```text
+data/monitoring/prediction_logs.csv
+```
+
+The log captures:
+
+timestamp
+model name
+model version
+model type
+record ID
+prediction output
+prediction probability or score
+prediction band
+recommended action
+prediction source
+
+The v2 payment failure inference flow now writes prediction events to this log, creating a simple audit trail.
+
+### Data Drift Monitoring
+
+The drift check is generated at:
+
+```text
+data/monitoring/data_drift_summary.csv
+```
+
+It compares a reference dataset against a simulated new scoring dataset across:
+
+amount
+counterparty risk score
+historical failure count
+risk-adjusted amount
+payment type mix
+channel mix
+country mix
+currency mix
+
+This demonstrates how the platform could monitor whether incoming payment patterns are changing compared with the original reference data.
+
+### Monitoring Report
+The generated monitoring report is available at:
+
+```text
+reports/model_monitoring_report.md
+```
+
+The report summarizes:
+
+model registry status
+prediction log activity
+data drift results
+governance notes
+current limitations
+production-readiness recommendations
+
+### Current Monitoring Status
+
+Current status:
+
+```text
+Experimental monitoring and governance foundation
+```
+Not yet:
+
+```text
+Production-ready MLOps monitoring system
+```
+
+### Current Limitations
+
+The monitoring layer is still portfolio-focused.
+
+Current limitations include:
+
+Prediction logs are file-based, not database-backed.
+Drift checks use simulated new scoring data.
+No automated alerting exists yet.
+No monitoring dashboard exists yet.
+No authentication or authorization exists.
+No model approval workflow exists yet.
+No scheduled monitoring jobs exist yet.
+No production data is used.
+
+### Recommended Next Improvements
+
+Future improvements should include:
+
+Connect prediction logging to all API endpoints.
+Store prediction logs in a database.
+Schedule drift checks.
+Add automated monitoring alerts.
+Add a monitoring dashboard.
+Add model owner and reviewer metadata.
+Add human-review outcome capture.
+Add deployment and rollback procedures.
