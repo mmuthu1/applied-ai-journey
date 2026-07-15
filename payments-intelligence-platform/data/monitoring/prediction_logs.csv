@@ -3,3 +3,6 @@ logged_at,model_name,model_version,model_type,record_id,prediction_value,predict
 2026-07-15T16:32:35.048101+00:00,payment_failure_classifier_v2,v2,classification,NEW-V2-1002,1.0,0.7424,HIGH,Review before release,sample_monitoring_script
 2026-07-15T16:32:35.048105+00:00,cash_forecast_model,v1,regression,2024-06-28,3110997.77,,MEDIUM,Monitor expected payment activity and exception volume,sample_monitoring_script
 2026-07-15T16:32:35.048108+00:00,payment_anomaly_detector,v1,anomaly_detection,NEW-A1002,-0.1636,,HIGH,High-priority anomaly review,sample_monitoring_script
+2026-07-15T20:16:52.596981+00:00,payment_failure_classifier_v2,v2,classification,NEW-V2-1001,0,0.1537,LOW,Allow normal processing,predict_failure_v2_script
+2026-07-15T20:16:52.602164+00:00,payment_failure_classifier_v2,v2,classification,NEW-V2-1002,1,0.7424,HIGH,Review before release,predict_failure_v2_script
+2026-07-15T20:16:52.604519+00:00,payment_failure_classifier_v2,v2,classification,NEW-V2-1003,0,0.4477,MEDIUM,Monitor or queue for secondary review,predict_failure_v2_script

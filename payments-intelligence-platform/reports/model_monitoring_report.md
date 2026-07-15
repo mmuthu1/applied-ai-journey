@@ -3,7 +3,7 @@
 Generated at:
 
 ```text
-2026-07-15T17:00:03.288255+00:00
+2026-07-15T20:23:31.620434+00:00
 
 Executive Summary
 
@@ -32,30 +32,34 @@ Model Registry Summary
 Prediction Log Summary
 
 Total prediction events logged: 
-4 
+7 
 
 ### Prediction Events by Model
 
 | Model                         |   Prediction Events |
 |:------------------------------|--------------------:|
-| payment_failure_classifier_v2 |                   2 |
+| payment_failure_classifier_v2 |                   5 |
 | cash_forecast_model           |                   1 |
 | payment_anomaly_detector      |                   1 |
 
 ### Prediction Events by Source
 
-| Source                   |   Prediction Events |
-|:-------------------------|--------------------:|
-| sample_monitoring_script |                   4 |
+| Source                    |   Prediction Events |
+|:--------------------------|--------------------:|
+| sample_monitoring_script  |                   4 |
+| predict_failure_v2_script |                   3 |
 
 ### Latest Prediction Events
 
-| logged_at                        | model_name                    | model_version   | model_type        | record_id   |   prediction_value |   prediction_probability | prediction_band   | recommended_action                                     | source                   |
-|:---------------------------------|:------------------------------|:----------------|:------------------|:------------|-------------------:|-------------------------:|:------------------|:-------------------------------------------------------|:-------------------------|
-| 2026-07-15T16:32:35.047626+00:00 | payment_failure_classifier_v2 | v2              | classification    | NEW-V2-1001 |          0         |                   0.1537 | LOW               | Allow normal processing                                | sample_monitoring_script |
-| 2026-07-15T16:32:35.048101+00:00 | payment_failure_classifier_v2 | v2              | classification    | NEW-V2-1002 |          1         |                   0.7424 | HIGH              | Review before release                                  | sample_monitoring_script |
-| 2026-07-15T16:32:35.048105+00:00 | cash_forecast_model           | v1              | regression        | 2024-06-28  |          3.111e+06 |                 nan      | MEDIUM            | Monitor expected payment activity and exception volume | sample_monitoring_script |
-| 2026-07-15T16:32:35.048108+00:00 | payment_anomaly_detector      | v1              | anomaly_detection | NEW-A1002   |         -0.1636    |                 nan      | HIGH              | High-priority anomaly review                           | sample_monitoring_script |
+| logged_at                        | model_name                    | model_version   | model_type        | record_id   |   prediction_value |   prediction_probability | prediction_band   | recommended_action                                     | source                    |
+|:---------------------------------|:------------------------------|:----------------|:------------------|:------------|-------------------:|-------------------------:|:------------------|:-------------------------------------------------------|:--------------------------|
+| 2026-07-15T16:32:35.047626+00:00 | payment_failure_classifier_v2 | v2              | classification    | NEW-V2-1001 |          0         |                   0.1537 | LOW               | Allow normal processing                                | sample_monitoring_script  |
+| 2026-07-15T16:32:35.048101+00:00 | payment_failure_classifier_v2 | v2              | classification    | NEW-V2-1002 |          1         |                   0.7424 | HIGH              | Review before release                                  | sample_monitoring_script  |
+| 2026-07-15T16:32:35.048105+00:00 | cash_forecast_model           | v1              | regression        | 2024-06-28  |          3.111e+06 |                 nan      | MEDIUM            | Monitor expected payment activity and exception volume | sample_monitoring_script  |
+| 2026-07-15T16:32:35.048108+00:00 | payment_anomaly_detector      | v1              | anomaly_detection | NEW-A1002   |         -0.1636    |                 nan      | HIGH              | High-priority anomaly review                           | sample_monitoring_script  |
+| 2026-07-15T20:16:52.596981+00:00 | payment_failure_classifier_v2 | v2              | classification    | NEW-V2-1001 |          0         |                   0.1537 | LOW               | Allow normal processing                                | predict_failure_v2_script |
+| 2026-07-15T20:16:52.602164+00:00 | payment_failure_classifier_v2 | v2              | classification    | NEW-V2-1002 |          1         |                   0.7424 | HIGH              | Review before release                                  | predict_failure_v2_script |
+| 2026-07-15T20:16:52.604519+00:00 | payment_failure_classifier_v2 | v2              | classification    | NEW-V2-1003 |          0         |                   0.4477 | MEDIUM            | Monitor or queue for secondary review                  | predict_failure_v2_script |
 
 
 Data Drift Summary

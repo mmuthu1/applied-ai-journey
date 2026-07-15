@@ -1,5 +1,9 @@
 from pathlib import Path
 
+from src.monitoring.prediction_logger import (
+    append_prediction_log,
+    build_prediction_log_event,
+)
 import joblib
 import numpy as np
 import pandas as pd
@@ -274,6 +278,22 @@ def print_predictions(results_df):
             f"Action: {row['recommended_action']}."
         )
 
+        log_event = build_prediction_log_event(
+            model_name="payment_failure_classifier_v2",
+            model_version="v2",
+            model_type="classification",
+            record_id=row["payment_id"],
+            prediction_value=int(row["predicted_is_failed"]),
+            prediction_probability=round(
+                float(row["predicted_failure_probability"]),
+                4,
+            ),
+            prediction_band=row["prediction_risk_band"],
+            recommended_action=row["recommended_action"],
+            source="predict_failure_v2_script",
+        )
+
+        append_prediction_log(log_event)
 
 def main():
     artifact = load_model_artifact()
