@@ -1,0 +1,9 @@
+feature,feature_type,reference_value,new_value,comparison_metric,change_pct,drift_level,reference_median,new_median
+amount,numeric,125237.8028,167306.0454,mean,33.59,HIGH,60695.485,89429.4945
+counterparty_risk_score,numeric,0.2879,0.3689,mean,28.13,HIGH,0.266,0.34
+historical_failure_count,numeric,1.0012,0.99,mean,-1.12,LOW,1.0,1.0
+risk_adjusted_amount,numeric,36310.2492,61822.9597,mean,70.26,HIGH,14411.9382,29937.2233
+payment_type,categorical,ACH,SWIFT,top_category_share,4.06,HIGH,,
+channel,categorical,BATCH,FILE,top_category_share,4.22,HIGH,,
+country,categorical,JP,IN,top_category_share,0.68,HIGH,,
+currency,categorical,CAD,CAD,top_category_share,0.92,LOW,,
