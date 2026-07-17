@@ -39,6 +39,11 @@ The current platform includes:
 13. Prediction audit logging
 14. Data drift monitoring
 15. Generated model monitoring report
+16. Payment operations runbooks
+17. Local GenAI/RAG-style document store
+18. Local document retrieval logic
+19. GenAI-style operations assistant
+20. Assistant retrieval evaluation
 
 ## Project Structure
 
@@ -1183,3 +1188,170 @@ Add a monitoring dashboard.
 Add model owner and reviewer metadata.
 Add human-review outcome capture.
 Add deployment and rollback procedures.
+
+## Week 8: GenAI/RAG Operations Assistant
+
+Week 8 added a local GenAI/RAG-style operations assistant for the Payments Intelligence Platform.
+
+The goal was to build an assistant that can answer payment operations questions using local project documentation, runbooks, and reports.
+
+This implementation is portfolio-safe and does not use confidential data or external APIs.
+
+### Week 8 Deliverables
+
+| Component | File |
+|---|---|
+| Payment failure review runbook | `docs/runbooks/payment_failure_review.md` |
+| Payment anomaly review runbook | `docs/runbooks/anomaly_review.md` |
+| Cash forecast review runbook | `docs/runbooks/cash_forecast_review.md` |
+| Model monitoring review runbook | `docs/runbooks/model_monitoring_review.md` |
+| Local document store | `src/genai/document_store.py` |
+| Retrieval logic | `src/genai/retrieve_context.py` |
+| Operations assistant | `src/genai/operations_assistant.py` |
+| Assistant evaluation | `src/genai/evaluate_assistant.py` |
+| Document store output | `data/genai/document_store.json` |
+| Assistant evaluation report | `reports/genai_assistant_evaluation.md` |
+
+### Assistant Workflow
+
+The assistant follows a simple RAG-style workflow:
+
+```text
+user question
+→ classify question type
+→ retrieve relevant runbook/report context
+→ generate structured operational response
+```
+
+The assistant can answer questions related to:
+
+high-risk payment review
+payment anomaly investigation
+cash forecast interpretation
+model monitoring and data drift review
+model version and prediction logging questions
+
+### Local Document Store
+
+The local document store is generated at:
+
+```text
+data/genai/document_store.json
+```
+
+It includes:
+
+  payment operations runbooks
+  model evaluation reports
+  monitoring report
+  project README documentation
+
+The document store currently contains:
+
+```text
+10 documents
+```
+
+### Retrieval Logic
+
+The retrieval layer searches the local document store and returns the most relevant documents for a user question.
+
+The retrieval logic currently uses:
+
+  keyword tokenization
+  stopword removal
+  document scoring
+  document-type weighting
+  runbook preference for operational questions
+  small keyword boosts for known operational scenarios
+
+This is a simple local retrieval approach and does not require embeddings or external APIs.
+
+### Operations Assistant
+
+The operations assistant is implemented in:
+
+```text
+src/genai/operations_assistant.py
+```
+
+It provides structured answers with:
+
+  question
+  recommended operational steps
+  important limitation
+  primary source
+  retrieved context
+
+Example questions:
+
+```text
+What should operations do for a high risk payment?
+How should we review a payment anomaly?
+What does high data drift mean?
+How should we interpret a cash forecast?
+```
+
+### Assistant Evaluation
+The assistant evaluation is implemented in:
+
+```text
+src/genai/evaluate_assistant.py
+```
+
+The evaluation checks whether the assistant:
+
+1. Classifies the question into the expected operations category.
+2. Retrieves the expected runbook as the top supporting document.
+
+Current evaluation result:
+
+```text
+Total questions: 8
+Passed questions: 8
+Failed questions: 0
+Overall pass rate: 100%
+```
+
+### Current Assistant Status
+
+Current status:
+
+```text
+Local experimental GenAI/RAG-style operations assistant
+```
+
+Not yet:
+
+```text
+Production-ready GenAI copilot
+```
+
+## Current Limitations
+
+The assistant is still experimental and portfolio-focused.
+
+Current limitations include:
+
+1. It uses keyword-based retrieval, not embeddings.
+2. It uses rule-based answer templates, not live LLM generation.
+3. It uses local project documentation only.
+4. It does not access live payment records.
+5. It does not support multi-turn conversations yet.
+6. It does not include source citations inside generated answers yet.
+7. It has not been tested with real operations users.
+8. It does not include access controls, audit permissions, or production guardrails.
+
+## Recommended Next Improvements
+
+Future improvements should include:
+
+1. Add chunk-level retrieval.
+2. Add semantic embeddings.
+3. Add LLM-based answer generation.
+4. Add source citations in final assistant answers.
+5. Add more evaluation questions.
+6. Add user feedback capture.
+7. Add guardrails for uncertain or unsupported answers.
+8. Connect assistant responses to actual prediction outputs and monitoring logs.
+

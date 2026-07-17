@@ -42,6 +42,12 @@ The project currently includes:
 * prediction audit logging
 * data drift monitoring
 * generated model monitoring report
+* monitoring and governance foundations
+* payment operations runbooks
+* local GenAI/RAG-style document store
+* local retrieval logic
+* GenAI-style operations assistant
+* assistant evaluation report
 
 Current test status:
 
@@ -223,9 +229,51 @@ Added monitoring and governance foundations for model metadata, prediction audit
 ```
 The monitoring layer is experimental and portfolio-focused. It is not yet a production MLOps system.
 
+### Week 8: GenAI/RAG Operations Assistant — Completed
+
+Week 8 added a local GenAI/RAG-style operations assistant on top of the Payments Intelligence Platform.
+
+Completed work:
+
+* payment operations runbooks
+* local document store
+* document retrieval logic
+* operations assistant
+* assistant evaluation
+* GenAI assistant evaluation report
+
+The assistant can answer payment operations questions using local project documentation and runbooks.
+
+Example supported questions:
+
+```text
+What should operations do for a high risk payment?
+How should we review a payment anomaly?
+What does high data drift mean?
+How should we interpret a cash forecast?
+```
+
+Evaluation result:
+
+```text
+Total questions: 8
+Passed questions: 8
+Failed questions: 0
+Overall pass rate: 100%
+```
+
+Key outcome:
+
+```text
+Added a local GenAI/RAG-style assistant that retrieves relevant runbooks and generates structured payment operations guidance.
+```
+
+The assistant is experimental and portfolio-focused. It does not use confidential data, external APIs, or production payment systems.
+
+
 ## Current Status
 
-The Payments Intelligence Platform now includes an end-to-end applied AI workflow covering data pipelines, machine learning models, model artifacts, FastAPI serving, automated tests, model improvement, and monitoring/governance foundations.
+The Payments Intelligence Platform now includes an end-to-end applied AI workflow covering data pipelines, machine learning models, model artifacts, FastAPI serving, automated tests, model improvement, monitoring/governance foundations, and a local GenAI/RAG-style operations assistant.
 
 Current status:
 
@@ -238,17 +286,16 @@ Not yet:
 Production-ready financial technology system
 ```
 
-
 ## Next Step
 
-The next project phase will focus on GenAI/RAG-based operations support.
+The next project phase will focus on portfolio polish and executive storytelling.
 
 Planned next work:
 
-* payment operations runbooks
-* retrieval over project documentation and runbooks
-* AI assistant for payment operations questions
-* explanation support for flagged payments
-* anomaly review support
-* cash forecast interpretation support
-* guardrails and limitations documentation
+* final project summary
+* architecture explanation
+* system design documentation
+* resume bullets
+* interview talking points
+* production-readiness roadmap
+* final README cleanup
